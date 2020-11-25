@@ -7,13 +7,16 @@ class QuestionSchema extends Schema {
     this.create('questions', (table) => {
       table.increments()
       table.string('question', 30).notNullable();
-      table.string('alternative', 100).notNullable();
-      table.string('answer',100)
-      table.timestamps();
+      table.string('answer',100);
       table
-      .integer('quiz_id')
-      .references('id')
-      .inTable('quizzes')
+        .integer('quiz_id')
+        .unsigned()
+        .notNullable()
+        .references('id')
+        .inTable('quizzes')
+        .onUpdate("CASCADE")
+        .onDelete("CASCADE");
+      table.timestamps();
     })
   }
 

@@ -10,10 +10,26 @@ class AnswerController {
    * Create/save a new answer.
    * POST tweets
    */
-  async update({ params, request, auth }) {
+  async update({ params, request, auth, response}) {
     const data = request.only(["answer"]);
+    var aux = []
+    var alternatives = []
 
     await ({ user_id: auth.user.id, ...data });
+
+    const another = await Database
+      .table('alternatives')
+      .innerJoin('questions', 'questions.id', ' alternatives.question_id')
+      .where('questions.id', '=',  params.question_id)
+
+    for(var i= 0; i < another.length; i++) {
+      aux = another[i].alternatives
+      alternatives.push(aux)
+    }
+
+    if (!alternatives.includes(data.answer)) {
+      return response.status(401).send("Marcação errada, utilize somente:[" + alternatives + "] como resposta")
+    }
 
     const tweets = await Database
     .table('questions')
@@ -23,13 +39,14 @@ class AnswerController {
     return tweets;
   }
 
-  async index({auth}) {
+  async index({auth, params}) {
     await ({ user_id: auth.user.id});
 
     const tweets = await Database
-    .table('questions')
+    .select('question', 'answer')
+    .from('questions')
     .whereNotNull('questions.answer')
-    .where('id', '=', auth.user.id)
+    .where('id', '=', params.question_id)
 
     return tweets;
   }
