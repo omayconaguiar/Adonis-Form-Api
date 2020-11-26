@@ -19,15 +19,6 @@ class AlternativeController {
       .insert({alternatives: data.alternatives, question_id: params.question_id})
       .into('alternatives')
 
-    const admin = await Database
-      .table('users')
-      .where('users.id', '=', quiz.user_id)
-
-    if(!admin.is_admin){
-      return response.status(401).send("Somente usuários admins podem realizar essa tarefa.")
-    }
-
-
     return tweets;
   }
 }

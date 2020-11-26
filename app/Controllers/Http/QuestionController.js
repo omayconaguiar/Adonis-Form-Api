@@ -1,6 +1,6 @@
 "use strict";
 
-const Question = use("App/Models/Question");
+const Database = use('Database')
 
 /**
  * Resourceful controller for interacting with tweets
@@ -10,25 +10,14 @@ class QuestionController {
    * Create/save a new question.
    * POST tweets
    */
-  async store({ request }) {
+  async store({ request, params}) {
     const data = request.only(["question"]);
 
-    const question = await Question.create({ quiz_id: request.params.quiz_id, ...data });
+    const tweets = await Database
+    .insert({question: data.question, quiz_id: params.quiz_id})
+    .into('questions')
 
-
-    const admin = await Database
-      .table('users')
-      .where('users.id', '=', quiz.user_id)
-
-      const admin = await Database
-      .table('users')
-      .where('users.id', '=', quiz.user_id)
-
-    if(!admin.is_admin){
-      return response.status(401).send("Somente usuários admins podem realizar essa tarefa.")
-    }
-
-    return question;
+    return tweets;
   }
 }
 

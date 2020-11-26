@@ -17,8 +17,6 @@ class QuizController {
       .innerJoin('quizzes', 'quizzes.user_id', ' users.id')
       .innerJoin('questions', 'questions.quiz_id', 'quizzes.id')
 
-
-
     const another = await Database
       .table('alternatives')
       .innerJoin('questions', 'questions.id', ' alternatives.question_id')
@@ -57,17 +55,9 @@ class QuizController {
    * Create/save a new quiz.
    * POST tweets
    */
-  async store({ request, auth, response }) {
+  async store({ request, auth }) {
     const data = request.only(["type_quiz", "question_quantity"]);
     const quiz = await Quiz.create({ user_id: auth.user.id, ...data });
-
-    const admin = await Database
-      .table('users')
-      .where('users.id', '=', quiz.user_id)
-
-    if(!admin.is_admin){
-      return response.status(401).send("Somente usuários admins podem realizar essa tarefa.")
-    }
 
     return quiz;
   }
@@ -76,19 +66,11 @@ class QuizController {
    * Delete a quiz with id.
    * DELETE tweets/:id
    */
-  async destroy({ params, auth }) {
+  async destroy({ params, auth, response }) {
     const quiz = await Quiz.findOrFail(params.id);
 
     if (quiz.user_id !== auth.user.id) {
       return response.status(401);
-    }
-
-    const admin = await Database
-      .table('users')
-      .where('users.id', '=', quiz.user_id)
-
-    if(!admin.is_admin){
-      return response.status(401).send("Somente usuários admins podem realizar essa tarefa.")
     }
 
     await quiz.delete();
