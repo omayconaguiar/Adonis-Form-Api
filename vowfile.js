@@ -15,6 +15,13 @@ const ace = require('@adonisjs/ace')
 
 module.exports = (cli, runner) => {
   runner.before(async () => {
+
+    runner._suites.sort(function (a, b) {
+      if(a.group._title < b.group._title) { return -1; }
+      if(a.group._title > b.group._title) { return 1; }
+      return 0;
+    })
+
     /*
     |--------------------------------------------------------------------------
     | Start the server
@@ -57,6 +64,6 @@ module.exports = (cli, runner) => {
     | original state
     |
     */
-    // await ace.call('migration:reset', {}, { silent: true })
+    await ace.call('migration:reset', {}, { silent: true })
   })
 }

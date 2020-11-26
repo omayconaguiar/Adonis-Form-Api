@@ -39,14 +39,15 @@ class AnswerController {
     return tweets;
   }
 
-  async index({auth, params}) {
+  async index({auth}) {
     await ({ user_id: auth.user.id});
 
     const tweets = await Database
     .select('question', 'answer')
     .from('questions')
+    .innerJoin('quizzes', 'quizzes.id', ' questions.quiz_id')
     .whereNotNull('questions.answer')
-    .where('id', '=', params.question_id)
+    .where('quizzes.user_id', '=', auth.user.id)
 
     return tweets;
   }

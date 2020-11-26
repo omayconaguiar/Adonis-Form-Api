@@ -1,31 +1,26 @@
-const { test, trait } = use('Test/Suite')('Session')
+const { test, trait } = use('Test/Suite')('05-Quiz')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Quiz = use('App/Models/Quiz')
-
-/** @type {typeof import('@adonisjs/lucid/src/Factory')} */
-// const Factory = use('Factory')
 
 const sessionPayloadCredentials = {
   email: 'maycon@maycon.com',
   password: '12345'
 }
 
-var faker = require('faker');
-var type = faker.lorem.word()
+const Database = use('Database')
 
 trait('Test/ApiClient')
 
 test('it should creation quiz with sucess', async ({ assert, client }) => {
   const sessionPayload = {
-    type_quiz: type
+    type_quiz: 'quizPost'
   }
 
   const responseAuth = await client
     .post('/authenticate')
     .send(sessionPayloadCredentials)
     .end()
-
 
   const response = await client
     .post('/quizzes')
@@ -42,7 +37,12 @@ test('it should return all the quiz with questions and alternatives', async ({ a
     .get('/quizzes')
     .end()
 
-  response.assertStatus(200|| 204)
+  if(response.status === 204){
+    response.assertStatus(204)
+  }else{
+    response.assertStatus(200)
+  }
+
   assert.exists(response.body)
 })
 
@@ -52,16 +52,33 @@ test('it should delete a quiz', async ({ assert, client }) => {
     .send(sessionPayloadCredentials)
     .end()
 
+  const users = await Database
+    .insert({email: 'testeQuiz@teste.com', password: 'password', username:'mayconQuiz', is_admin:1})
+    .into('users')
+    .returning('id')
+
+  const quiz = await Database
+    .insert({type_quiz: 'delete', user_id: users})
+    .into('quizzes')
+    .returning('id')
+
+  const quizz = await Database
+    .select('id')
+    .from('quizzes')
+
   const response = await client
-    .delete('/quizzes/1')
-    .send()
+    .delete('/quizzes/'+ quizz[0].id)
     .header('Authorization', 'Bearer ' + responseAuth.body.token)
+    .send()
     .end()
 
-  response.assertStatus(200)
+  if(response.status === 204){
+    response.assertStatus(204)
+  }else{
+    response.assertStatus(200)
+  }
   assert.exists(response.body)
 })
-
 
 
 

@@ -1,8 +1,10 @@
-const { test, trait } = use('Test/Suite')('Session')
+const { test, trait } = use('Test/Suite')('01-adminCreate')
+
+/** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 
 trait('Test/ApiClient')
 
-test('it should creation a email and know password', async ({ assert, client }) => {
+test('it should creation a know email and password to reuse', async ({ assert, client }) => {
   const sessionPayload = {
     email: 'maycon@maycon.com',
     password: '12345',

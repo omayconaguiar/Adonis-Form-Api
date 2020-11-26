@@ -26,3 +26,25 @@ Run the following command to run startup migrations.
 ```js
 adonis migration:run
 ```
+
+### Test
+
+adonis test
+
+### Run 
+
+adonis server --dev
+
+### Business rules
+
+A api cria questionários sobre determinado asssunto, e nesses questionários é anexado uma pergunta
+com possíveis alternativas para ela, podendo somente ser criada por usuários admins.
+
+O usuário comum pode acessar a pergunta, e respondê-la marcando somente as alternativas possíveis.
+E depois o mesmo usuário consegue visualizar todas respostas que ele fez.
+
+E qualquer pessoa consegue acessar a api de questionários existentes, perguntas pertencentes ao questionário e suas respectivas respostas.
+
+Todas as etapas do processo requerem autenticação, ou seja, o usuário caso não tenha conta precisa se cadastrar e depois fazer login para utilizar seu token nas apis que necessitam de autorização.
+
+Um usuário admin é o que possui is_admin como true ou 1 no banco de dados, podendo ser enviado opcionalmente na api de registro.

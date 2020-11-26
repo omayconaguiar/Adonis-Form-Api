@@ -13,5 +13,5 @@ Route.group(() => {
   Route.delete("/quizzes/:id", "QuizController.destroy").middleware(["admin"]);
   Route.post("/questions/:quiz_id", "QuestionController.store").middleware(["admin"]);
   Route.put("/answers/:question_id", "AnswerController.update");
-  Route.get("/answers/:question_id", "AnswerController.index");
+  Route.get("/answers", "AnswerController.index");
 }).middleware(["auth"]);
