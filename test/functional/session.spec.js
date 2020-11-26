@@ -6,17 +6,37 @@ const User = use('App/Models/User')
 /** @type {typeof import('@adonisjs/lucid/src/Factory')} */
 const Factory = use('Factory')
 
+var faker = require('faker');
+const fakeEmail = faker.internet.email()
+const fakePassword = faker.internet.password()
+const username = faker.internet.userName()
 
 trait('Test/ApiClient')
 
+test('it should create user with success', async ({ assert, client }) => {
+  const sessionPayload = {
+    email: fakeEmail,
+    password:fakePassword,
+    username: username,
+    is_admin: 1
+  }
+
+  const response = await client
+    .post('/register')
+    .send(sessionPayload)
+    .end()
+
+  response.assertStatus(200)
+
+  assert.exists(response.body)
+})
+
+
 test('it should return bearer token', async ({ assert, client }) => {
   const sessionPayload = {
-    email: 'maayconaguiar11@hotmail.com',
-    password: '12345'
+    email: fakeEmail,
+    password:fakePassword,
   }
-  const user = await Factory
-    .model('App/Models/User')
-    .create(sessionPayload)
 
   const response = await client
     .post('/authenticate')
@@ -26,3 +46,6 @@ test('it should return bearer token', async ({ assert, client }) => {
   response.assertStatus(200)
   assert.exists(response.body.token)
 })
+
+
+

@@ -25,6 +25,7 @@
     "@adonisjs/ignitor": "^2.0.6",
     "@adonisjs/lucid": "^5.0.4",
     "@adonisjs/vow": "^1.0.17",
+    "faker": "^5.1.0",
     "mysql": "^2.18.1",
     "pg": "^7.4.3",
     "sqlite3": "^5.0.0"
