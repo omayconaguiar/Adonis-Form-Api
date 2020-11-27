@@ -16,8 +16,10 @@ Install the adonis
 yarn add @adonisjs/cli
 ```
 
-or manually clone the repo and then run `yarn install`.
-
+and manually run
+```js
+`yarn install`.
+```
 
 ### Migrations
 
