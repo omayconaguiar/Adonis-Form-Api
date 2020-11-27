@@ -28,7 +28,7 @@ class AnswerController {
     }
 
     if (!alternatives.includes(data.answer)) {
-      return response.status(401).send("Marcação errada, utilize somente:[" + alternatives + "] como resposta")
+      return response.status(409).send("Marcação errada, utilize somente:[" + alternatives + "] como resposta")
     }
 
     const tweets = await Database

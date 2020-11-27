@@ -1,4 +1,4 @@
-const { test, trait } = use('Test/Suite')('05-Quiz')
+const { test, trait } = use('Test/Suite')('03-Quiz')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Quiz = use('App/Models/Quiz')
@@ -57,7 +57,7 @@ test('it should delete a quiz', async ({ assert, client }) => {
     .into('users')
     .returning('id')
 
-  const quiz = await Database
+  await Database
     .insert({type_quiz: 'delete', user_id: users})
     .into('quizzes')
     .returning('id')

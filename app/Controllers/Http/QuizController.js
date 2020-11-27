@@ -27,8 +27,10 @@ class QuizController {
 
     for(var k = 0; k < another.length; k++){
       var alt = {
-        QuestionAlternative: another[k].alternatives,
-        ResponsableQuizz : another[k].type_quiz
+        questionId: another[k].id,
+        quizName : another[k].type_quiz,
+        question: another[k].question,
+        questionAlternative: another[k].alternatives
       }
       alternatives.push(alt)
     }
@@ -43,6 +45,7 @@ class QuizController {
 
       var result = {
         alternatives,
+        numberOfQuizzes: tweets.length,
         quizz:{
           questions
         }

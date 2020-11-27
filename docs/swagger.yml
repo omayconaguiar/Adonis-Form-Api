@@ -204,18 +204,26 @@ paths:
                   alternatives:
                       type: object
                       properties:
-                        Question:
-                            type: string
-                            description: Question
-                            example: Qual seu tipo sanguíneo?
-                        QuestionAlternative:
+                        questionId:
+                          type: integer
+                          description: questionId
+                          example: 1
+                        quizName:
+                          type: string
+                          description: QuizName
+                          example: Formulário de Saúde
+                        question:
+                          type: string
+                          description: Question
+                          example: Qual seu tipo sanguíneo?
+                        questionAlternative:
                           type: string
                           description: QuestionAlternative
                           example: o negativo
-                        QuizName:
-                          type: string
-                          description: ResponsableQuizz
-                          example: Formulário de Saúde
+                  numberOfQuizzes:
+                    type: integer
+                    description: numberOfQuizzes
+                    example: 1
                   quizz:
                     type: object
                     properties:
@@ -225,7 +233,7 @@ paths:
                           quizName:
                             type: string
                             description: quizName
-                            example: Questionarios de saude
+                            example: Formulário de saude
                           question:
                             type: string
                             description: question
@@ -326,6 +334,8 @@ paths:
       responses:
         200:
           $ref: '#/components/responses/Success'
+        209:
+          $ref: '#/components/responses/Exist'
         204:
           $ref: '#/components/responses/NoContent'
         401:
@@ -414,25 +424,6 @@ components:
       type: http
       scheme: basic
       description: Autenticação Bearer (https://en.wikipedia.org/wiki/JSON_Web_Token). O usuário envia requests HTTP utilizando o header `Authorization` contendo as palavras `Bearer` seguido de um espaço e uma string `contendo o token`.
-    BadRequest:
-      description: Requisição inválida
-      content:
-        application/json:
-          schema:
-            properties:
-              code:
-                description: Código do erro
-                type: string
-                example: 'BAD_REQUEST'
-              message:
-                description: Mensagem de erro
-                type: string
-                example: 'Invalid request params'
-              details:
-                description: Detalhes do erro
-                type: array
-                example:
-                  - message: '"body.account.branch" is not allowed to be empty'
 
   responses:
     OutOfCuttingTimeError:
@@ -508,5 +499,15 @@ components:
               properties:
                 message:
                   description: conteúdo
+    Exist:
+        description: Alternativa ja escolhida
+        content:
+          application/json:
+            schema:
+               properties:
+                message:
+                  description: Alternativa ja escolhida
+                  type: string
+                  example: Alternativa ja escolhida
 
 
