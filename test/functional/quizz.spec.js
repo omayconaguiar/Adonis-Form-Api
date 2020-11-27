@@ -1,4 +1,4 @@
-const { test, trait } = use('Test/Suite')('03-Quiz')
+const { test, trait } = use('Test/Suite')('06-Quiz')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 const Quiz = use('App/Models/Quiz')
@@ -52,19 +52,20 @@ test('it should delete a quiz', async ({ assert, client }) => {
     .send(sessionPayloadCredentials)
     .end()
 
-  const users = await Database
-    .insert({email: 'testeQuiz@teste.com', password: 'password', username:'mayconQuiz', is_admin:1})
-    .into('users')
-    .returning('id')
+    const sessionPayload = {
+      type_quiz: 'quizPostD'
+    }
 
-  await Database
-    .insert({type_quiz: 'delete', user_id: users})
-    .into('quizzes')
-    .returning('id')
+  await client
+    .post('/quizzes')
+    .send(sessionPayload)
+    .header('Authorization', 'Bearer ' + responseAuth.body.token)
+    .end()
 
   const quizz = await Database
     .select('id')
     .from('quizzes')
+    .orderBy('id', 'desc')
 
   const response = await client
     .delete('/quizzes/'+ quizz[0].id)

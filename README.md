@@ -10,13 +10,13 @@ This is the boilerplate for creating an API server in AdonisJs, it comes pre-con
 
 ## Setup
 
-Use the adonis command to install the blueprint
+Install the adonis
 
-```bash
-adonis new yardstick --api-only
+```js
+yarn add @adonisjs/cli
 ```
 
-or manually clone the repo and then run `npm install`.
+or manually clone the repo and then run `yarn install`.
 
 
 ### Migrations
@@ -38,6 +38,20 @@ adonis test
 ```js
 adonis server --dev
 ```
+
+### ENV
+
+Copie e cole as variáveis de ambiente em um arquivo .env.
+Crie uma nova APP_KEY, com o comando:
+
+```js
+adonis key:generate
+```
+
+### Documentation 
+
+Na pasta /docs se encontra a documentação com todos os endpoints, qual payload, headers e demais informações a serem enviadas em cada requisição.
+
 
 ### Business rules
 

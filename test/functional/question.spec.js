@@ -1,4 +1,4 @@
-const { test, trait } = use('Test/Suite')('04-Question')
+const { test, trait } = use('Test/Suite')('03-Question')
 
 /** @type {typeof import('@adonisjs/lucid/src/Lucid/Model')} */
 
