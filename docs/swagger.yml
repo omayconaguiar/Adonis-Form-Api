@@ -1,0 +1,512 @@
+openapi: 3.0.2
+info:
+  version: 0.1.0
+  title: API de Formulário
+  description: API para gerenciamento de operações de formulários
+  contact:
+    name: API Support
+    email: maayconaguiar11@hotmail.com
+
+servers:
+  - description: Desenvolvimento
+    url: http://127.0.0.1:3333
+
+tags:
+  - name: Auth
+    description: Autenticação e autorização
+  - name: Quiz
+    description: Endpoints dos questionários
+  - name: Question
+    description: Perguntas dos questionários
+  - name: Alternative
+    description: Alternativa das perguntas
+  - name: Answer
+    description: Resposta das perguntas pelo usuário
+security:
+  - Authorization: []
+
+paths:
+  /register/auth:
+    description: Registra um novo usuário
+    summary: Registra um novo usuário
+    post:
+      tags:
+        - Auth
+      summary: Criar novo usuário
+      description: |
+        Registra um novo usuário no sistema.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - email
+                - password
+              properties:
+                username:
+                  type: string
+                  description: username
+                  example: omaycon
+                email:
+                  type: string
+                  description: email
+                  example: maycon@maycon.com
+                password:
+                  type: string
+                  description: password
+                  example: 12345
+                is_admin:
+                  type: string
+                  description: is_admin
+                  example: 1
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                required:
+                  - key
+                properties:
+                  username:
+                    type: string
+                    example: omaycon
+                  email:
+                    type: string
+                    example: maycon@maycon.com
+                  password:
+                    type: string
+                    example: $2a$10$CVleRQILZUpef8pa7vnyme5XzVkfwxp1rb1fBjVw5ISkpxhs9ay4m
+                  is_admin:
+                    type: integer
+                    example: 1
+                  created_at:
+                    type: string
+                    example: "2020-11-26 18:28:59"
+                  updated_at:
+                    type: string
+                    example: "2020-11-26 18:28:59"
+                  id:
+                    type: integer
+                    example: 1
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /authenticate/authenticate:
+    description: Vínculos de chaves com contas transacionais para operações com o participante direto
+    summary: Vínculos de chave
+    post:
+      tags:
+        - Auth
+      summary: Login com usuário
+      description: |
+        Registra um novo usuário no sistema.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - username
+                - email
+                - password
+              properties:
+                email:
+                  type: string
+                  description: email
+                  example: maycon@maycon.com
+                password:
+                  type: string
+                  description: password
+                  example: "12345"
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                required:
+                  - key
+                properties:
+                  type:
+                    type: string
+                    example: bearer
+                  token:
+                    type: string
+                    example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjEsImlhdCI6MTYwNjQyNjE0Mn0.MM7n7CVsw7WRj1vYSz3o02d4elKO-bGr_rDJ0Fs4-CQ
+                  refreshToken:
+                    type: string
+                    example: null
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /quizzes:
+    post:
+      tags:
+        - Quiz
+      summary: Criar um novo questionário
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - type_quiz
+              properties:
+                type_quiz:
+                  type: string
+                  description: tipo do questionário
+                  example: Questionário de saúde
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                required:
+                  - key
+                properties:
+                  user_id:
+                    type: string
+                    example: omaycon
+                  type_quiz:
+                    type: string
+                    example: Questionário de saúde
+                  created_at:
+                    type: string
+                    example: "2020-11-26 18:28:59"
+                  updated_at:
+                    type: string
+                    example: "2020-11-26 18:28:59"
+                  id:
+                    type: integer
+                    example: 1
+        204:
+          $ref: '#/components/responses/NoContent'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /quizze:
+    description: Vínculos de chaves com contas transacionais para operações com o participante direto
+    summary: Vínculos de chave
+    get:
+      tags:
+        - Quiz
+      summary: Retorna todos questionários
+      description: Pega todos questionários, com suas respectivas perguntas, alternativas e respostas associadas.
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                required:
+                  - key
+                properties:
+                  alternatives:
+                      type: object
+                      properties:
+                        Question:
+                            type: string
+                            description: Question
+                            example: Qual seu tipo sanguíneo?
+                        QuestionAlternative:
+                          type: string
+                          description: QuestionAlternative
+                          example: o negativo
+                        QuizName:
+                          type: string
+                          description: ResponsableQuizz
+                          example: Formulário de Saúde
+                  quizz:
+                    type: object
+                    properties:
+                      questions:
+                        type: object
+                        properties:
+                          quizName:
+                            type: string
+                            description: quizName
+                            example: Questionarios de saude
+                          question:
+                            type: string
+                            description: question
+                            example: Qual seu tipo sanguíneo?
+                          answer:
+                            type: string
+                            description: answer
+                            example: o negativo
+        204:
+          $ref: '#/components/responses/NoContent'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /quizzes/{quiz_id}:
+    description: Vínculos de chaves com contas transacionais para operações com o participante direto
+    summary: Vínculos de chave
+    delete:
+      tags:
+        - Quiz
+      summary: Delete
+      parameters:
+      - name: "Authorization"
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          description: "JSON Web Token"
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+        204:
+          $ref: '#/components/responses/NoContent'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /question/{quiz_id}:
+    description: Registra uma nova pergunta atrelado a um questionário
+    summary: Registra um nova pergunta
+    parameters:
+    - name: "Authorization"
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        description: "JSON Web Token"
+    post:
+      tags:
+        - Question
+      summary: Criar uma nova pergunta
+      description: |
+        Registra um novo usuário no sistema.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - question
+              properties:
+                question:
+                  type: string
+                  description: question
+                  example: Qual o tipo de sangue?
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /alternative/{question_id}:
+    description: Registra uma nova alternativa para uma pergunta
+    summary: Registra uma nova alternativa
+    post:
+      tags:
+        - Alternative
+      summary: Criar nova alternativa
+      parameters:
+      - name: "Authorization"
+        in: header
+        required: true
+        schema:
+          type: string
+          example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+          description: "JSON Web Token"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - alternatives
+              properties:
+                alternatives:
+                  type: string
+                  description: username
+                  example: O negativo
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+        204:
+          $ref: '#/components/responses/NoContent'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /answer/{question_id}:
+    description: Insere resposta a uma pergunta especifica
+    summary: Insere resposta a uma pergunta especifica
+    parameters:
+    - name: "Authorization"
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        description: "JSON Web Token"
+    put:
+      tags:
+        - Answer
+      summary: Responde uma pergunta
+      description:
+        Insere resposta a uma pergunta especifica
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - answer
+              properties:
+                answer:
+                  type: string
+                  description: answer
+                  example: O positivo
+      responses:
+        200:
+          $ref: '#/components/responses/Success'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        204:
+          $ref: '#/components/responses/NoContent'
+        409:
+          $ref: '#/components/responses/Erro'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+  /answers:
+    description: Registra um novo usuário
+    summary: Registra um novo usuário
+    parameters:
+    - name: "Authorization"
+      in: header
+      required: true
+      schema:
+        type: string
+        example: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
+        description: "JSON Web Token"
+    get:
+      tags:
+        - Answer
+      summary: Recebe perguntas por usuário
+      description: Recebe as perguntas respondidas pelo usuário
+      responses:
+        200:
+          description: Sucesso
+          content:
+            application/json:
+              schema:
+                required:
+                  - key
+                properties:
+                  question:
+                    type: string
+                    example: omaycon
+                  answer:
+                    type: string
+                    example: maycon@maycon.com
+        204:
+          $ref: '#/components/responses/NoContent'
+        401:
+          $ref: '#/components/responses/Unauthorized'
+        500:
+          $ref: '#/components/responses/InternalServerError'
+components:
+  securitySchemes:
+    Authorization:
+      type: http
+      scheme: basic
+      description: Autenticação Bearer (https://en.wikipedia.org/wiki/JSON_Web_Token). O usuário envia requests HTTP utilizando o header `Authorization` contendo as palavras `Bearer` seguido de um espaço e uma string `contendo o token`.
+    BadRequest:
+      description: Requisição inválida
+      content:
+        application/json:
+          schema:
+            properties:
+              code:
+                description: Código do erro
+                type: string
+                example: 'BAD_REQUEST'
+              message:
+                description: Mensagem de erro
+                type: string
+                example: 'Invalid request params'
+              details:
+                description: Detalhes do erro
+                type: array
+                example:
+                  - message: '"body.account.branch" is not allowed to be empty'
+
+  responses:
+    OutOfCuttingTimeError:
+      description: Serviço indisponível
+      content:
+        'application/json':
+          schema:
+            properties:
+              code:
+                description: Código do erro
+                type: string
+                example: 'OUT_OF_CUTTING_TIME'
+              message:
+                description: Mensagem de erro
+                type: string
+                example: 'Service is out of cutting time'
+
+    InternalServerError:
+      description: Erro interno do servidor
+      content:
+        application/json:
+          schema:
+            properties:
+              code:
+                description: Código do erro
+                type: string
+                example: 'INTERNAL_SERVER_ERROR'
+              message:
+                description: Mensagem de erro
+                type: string
+                example: 'Failed to register a key'
+              details:
+                description: Detalhes do erro
+                type: array
+                example:
+                  - message: 'Unexpected error to create'
+    Unauthorized:
+      description: Erro, não autorizado
+      content:
+        application/json:
+          schema:
+            properties:
+              message:
+                description: Código do erro
+                type: string
+                example: 'Só usuários admins podem realizar essa operação'
+    Success:
+      description: Successo
+      content:
+        application/json:
+          schema:
+            properties:
+              message:
+                description: Sucesso
+                type: integer
+                example: [1]
+
+    Erro:
+        description: Só pode utilizar respostas escolhidas pelo admin
+        content:
+          application/json:
+            schema:
+              properties:
+                message:
+                  description: Só pode utilizar respostas escolhidas pelo admin
+                  type: string
+                  example: Marcação errada, utilize somente:[O positivo] como resposta
+    NoContent:
+        description: Sem conteúdo
+        content:
+          application/json:
+            schema:
+              properties:
+                message:
+                  description: conteúdo
+
+

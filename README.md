@@ -29,11 +29,15 @@ adonis migration:run
 
 ### Test
 
+```js
 adonis test
+```
 
 ### Run 
 
+```js
 adonis server --dev
+```
 
 ### Business rules
 
@@ -45,6 +49,6 @@ E depois o mesmo usuário consegue visualizar todas respostas que ele fez.
 
 E qualquer pessoa consegue acessar a api de questionários existentes, perguntas pertencentes ao questionário e suas respectivas respostas.
 
-Todas as etapas do processo requerem autenticação, ou seja, o usuário caso não tenha conta precisa se cadastrar e depois fazer login para utilizar seu token nas apis que necessitam de autorização.
+Quase todas as etapas do processo requerem autenticação, ou seja, o usuário caso não tenha conta precisa se cadastrar e depois fazer login para utilizar seu token nas apis que necessitam de autorização.
 
 Um usuário admin é o que possui is_admin como true ou 1 no banco de dados, podendo ser enviado opcionalmente na api de registro.
