@@ -39,6 +39,10 @@ adonis test
 adonis server --dev
 ```
 
+### Documentation 
+
+Na pasta /docs se encontra a documentação com todos os endpoints, qual payload, headers e demais informações a serem enviadas em cada requisição.
+
 ### Business rules
 
 A api cria questionários sobre determinado asssunto, e nesses questionários é anexado uma pergunta
